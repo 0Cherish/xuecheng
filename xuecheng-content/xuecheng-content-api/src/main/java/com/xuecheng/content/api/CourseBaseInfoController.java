@@ -2,6 +2,8 @@ package com.xuecheng.content.api;
 
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
+import com.xuecheng.content.model.dto.AddCourseDTO;
+import com.xuecheng.content.model.dto.CourseBaseInfoDTO;
 import com.xuecheng.content.model.dto.QueryCourseParamsDTO;
 import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.service.CourseBaseInfoService;
@@ -21,14 +23,23 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(value = "课程信息管理接口", tags = "课程信息管理接口")
 @RestController
+@RequestMapping("/course")
 public class CourseBaseInfoController {
 
     @Autowired
     private CourseBaseInfoService courseBaseInfoService;
 
     @ApiOperation("课程查询接口")
-    @PostMapping("/course/list")
+    @PostMapping("/list")
     public PageResult<CourseBase> list(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDTO queryCourseParamsDTO) {
         return courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParamsDTO);
+    }
+
+    @ApiOperation("新增课程")
+    @PostMapping
+    public CourseBaseInfoDTO createCourseBase(@RequestBody AddCourseDTO addCourseDTO) {
+        // TODO 获取用户所属机构id
+        Long companyId = 1L;
+        return courseBaseInfoService.createCourseBase(companyId, addCourseDTO);
     }
 }
