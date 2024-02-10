@@ -2,6 +2,7 @@ package com.xuecheng.content.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xuecheng.base.exception.SystemException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.mapper.CourseBaseMapper;
@@ -9,6 +10,7 @@ import com.xuecheng.content.mapper.CourseCategoryMapper;
 import com.xuecheng.content.mapper.CourseMarketMapper;
 import com.xuecheng.content.model.dto.AddCourseDTO;
 import com.xuecheng.content.model.dto.CourseBaseInfoDTO;
+import com.xuecheng.content.model.dto.EditCourseDTO;
 import com.xuecheng.content.model.dto.QueryCourseParamsDTO;
 import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.model.po.CourseCategory;
@@ -62,34 +64,6 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     @Transactional
     @Override
     public CourseBaseInfoDTO createCourseBase(Long companyId, AddCourseDTO addCourseDTO) {
-        //合法性校验
-        if (StringUtils.isBlank(addCourseDTO.getName())) {
-            throw new RuntimeException("课程名称为空");
-        }
-
-        if (StringUtils.isBlank(addCourseDTO.getMt())) {
-            throw new RuntimeException("课程分类为空");
-        }
-
-        if (StringUtils.isBlank(addCourseDTO.getSt())) {
-            throw new RuntimeException("课程分类为空");
-        }
-
-        if (StringUtils.isBlank(addCourseDTO.getGrade())) {
-            throw new RuntimeException("课程等级为空");
-        }
-
-        if (StringUtils.isBlank(addCourseDTO.getTeachmode())) {
-            throw new RuntimeException("教育模式为空");
-        }
-
-        if (StringUtils.isBlank(addCourseDTO.getUsers())) {
-            throw new RuntimeException("适应人群为空");
-        }
-
-        if (StringUtils.isBlank(addCourseDTO.getCharge())) {
-            throw new RuntimeException("收费规则为空");
-        }
 
         // 向课程基本信息表写入数据
         CourseBase courseBase = new CourseBase();
@@ -102,7 +76,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         courseBase.setStatus("203001");
         int count = courseBaseMapper.insert(courseBase);
         if (count <= 0) {
-            throw new RuntimeException("添加课程失败");
+            SystemException.cast("添加课程失败");
         }
 
         // 向课程营销表写入数据
@@ -113,29 +87,24 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 保存营销信息
         int i = saveCourseMarket(courseMarket);
         if (i <= 0) {
-            throw new RuntimeException("保存课程营销信息失败");
+            SystemException.cast("保存课程营销信息失败");
         }
 
         //查询课程基本信息及营销信息
         return getCourseBaseInfo(courseId);
     }
 
-    /**
-     * 查询课程信息
-     *
-     * @param courseId 课程id
-     * @return 课程信息
-     */
-    private CourseBaseInfoDTO getCourseBaseInfo(Long courseId) {
+    @Override
+    public CourseBaseInfoDTO getCourseBaseInfo(Long courseId) {
         CourseBase courseBase = courseBaseMapper.selectById(courseId);
-        if(courseBase == null){
+        if (courseBase == null) {
             return null;
         }
         CourseMarket courseMarket = courseMarketMapper.selectById(courseId);
 
         CourseBaseInfoDTO courseBaseInfoDTO = new CourseBaseInfoDTO();
         BeanUtils.copyProperties(courseBase, courseBaseInfoDTO);
-        if(courseMarket != null){
+        if (courseMarket != null) {
             BeanUtils.copyProperties(courseMarket, courseBaseInfoDTO);
         }
 
@@ -149,6 +118,37 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
     }
 
+    @Override
+    public CourseBaseInfoDTO updateCourseBase(Long companyId, EditCourseDTO editCourseDTO) {
+        Long courseId = editCourseDTO.getId();
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if (courseBase == null) {
+            SystemException.cast("课程不存在");
+        }
+
+        // 数据合法性校验
+        if (!companyId.equals(courseBase.getCompanyId())) {
+            SystemException.cast("本机构只能修改本机构的课程");
+        }
+
+        // 封装数据
+        BeanUtils.copyProperties(editCourseDTO, courseBase);
+        courseBase.setChangeDate(LocalDateTime.now());
+
+        // 更新课程基本信息
+        int count = courseBaseMapper.updateById(courseBase);
+        if (count <= 0) {
+            SystemException.cast("修改课程失败");
+        }
+
+        // 更新营销信息
+        CourseMarket courseMarket = new CourseMarket();
+        BeanUtils.copyProperties(editCourseDTO, courseMarket);
+        saveCourseMarket(courseMarket);
+
+        return getCourseBaseInfo(courseId);
+    }
+
     /**
      * 保存营销信息
      *
@@ -159,12 +159,12 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 参数的合法性校验
         String charge = courseMarket.getCharge();
         if (StringUtils.isBlank(charge)) {
-            throw new RuntimeException("收费规则没有选择");
+            SystemException.cast("收费规则没有选择");
         }
         //收费规则为收费
         if ("201001".equals(charge)) {
             if (courseMarket.getPrice() == null || courseMarket.getPrice() <= 0) {
-                throw new RuntimeException("课程为收费价格不能为空且必须大于0");
+                SystemException.cast("课程为收费价格不能为空且必须大于0");
             }
         }
 

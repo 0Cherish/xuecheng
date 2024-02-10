@@ -8,7 +8,7 @@ Content-Type: application/json
   "publishStatus": ""
 }
 
-### 查询过课程分类
+### 查询课程分类
 GET {{content_host}}/content/course-category/tree-nodes
 
 ### 创建课程
@@ -33,3 +33,6 @@ Content-Type: application/json
   "grade": "204001",
   "description": ""
 }
+
+### 课程查询
+GET {{content_host}}/content/course/40

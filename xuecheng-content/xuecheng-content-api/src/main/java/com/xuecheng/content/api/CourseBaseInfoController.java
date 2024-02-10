@@ -1,19 +1,19 @@
 package com.xuecheng.content.api;
 
+import com.xuecheng.base.exception.ValidationGroups;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.model.dto.AddCourseDTO;
 import com.xuecheng.content.model.dto.CourseBaseInfoDTO;
+import com.xuecheng.content.model.dto.EditCourseDTO;
 import com.xuecheng.content.model.dto.QueryCourseParamsDTO;
 import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.service.CourseBaseInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 课程信息相关接口
@@ -29,7 +29,7 @@ public class CourseBaseInfoController {
     @Autowired
     private CourseBaseInfoService courseBaseInfoService;
 
-    @ApiOperation("课程查询接口")
+    @ApiOperation("课程分页查询")
     @PostMapping("/list")
     public PageResult<CourseBase> list(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDTO queryCourseParamsDTO) {
         return courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParamsDTO);
@@ -37,9 +37,23 @@ public class CourseBaseInfoController {
 
     @ApiOperation("新增课程")
     @PostMapping
-    public CourseBaseInfoDTO createCourseBase(@RequestBody AddCourseDTO addCourseDTO) {
+    public CourseBaseInfoDTO createCourseBase(@RequestBody @Validated(ValidationGroups.Insert.class) AddCourseDTO addCourseDTO) {
         // TODO 获取用户所属机构id
         Long companyId = 1L;
         return courseBaseInfoService.createCourseBase(companyId, addCourseDTO);
+    }
+
+    @ApiOperation("根据id查询课程")
+    @GetMapping("/{courseId}")
+    public CourseBaseInfoDTO getCourseBaseById(@PathVariable Long courseId) {
+        return courseBaseInfoService.getCourseBaseInfo(courseId);
+    }
+
+    @ApiOperation("修改课程")
+    @PutMapping
+    public CourseBaseInfoDTO modifyCourseBase(@RequestBody @Validated(ValidationGroups.Update.class) EditCourseDTO editCourseDTO) {
+        // TODO 获取用户所属机构id
+        Long companyId = 1L;
+        return courseBaseInfoService.updateCourseBase(companyId, editCourseDTO);
     }
 }
