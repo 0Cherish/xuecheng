@@ -16,7 +16,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RestErrorResponse implements Serializable {
 
+    private String errCode;
+
     private String errMessage;
 
-
+    public RestErrorResponse(String errMessage) {
+        this.errMessage = errMessage;
+    }
 }

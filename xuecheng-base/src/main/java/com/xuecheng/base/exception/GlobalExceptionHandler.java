@@ -46,9 +46,7 @@ public class GlobalExceptionHandler {
         BindingResult bindingResult = e.getBindingResult();
         // 存储错误信息
         List<String> errors = new ArrayList<>();
-        bindingResult.getFieldErrors().forEach(item -> {
-            errors.add(item.getDefaultMessage());
-        });
+        bindingResult.getFieldErrors().forEach(item -> errors.add(item.getDefaultMessage()));
 
         String errMessage = StringUtils.join(errors, ",");
 

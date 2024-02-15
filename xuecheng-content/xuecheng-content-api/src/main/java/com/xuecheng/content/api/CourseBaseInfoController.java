@@ -39,7 +39,7 @@ public class CourseBaseInfoController {
     @PostMapping
     public CourseBaseInfoDTO createCourseBase(@RequestBody @Validated(ValidationGroups.Insert.class) AddCourseDTO addCourseDTO) {
         // TODO 获取用户所属机构id
-        Long companyId = 1L;
+        Long companyId = 1232141425L;
         return courseBaseInfoService.createCourseBase(companyId, addCourseDTO);
     }
 
@@ -53,7 +53,13 @@ public class CourseBaseInfoController {
     @PutMapping
     public CourseBaseInfoDTO modifyCourseBase(@RequestBody @Validated(ValidationGroups.Update.class) EditCourseDTO editCourseDTO) {
         // TODO 获取用户所属机构id
-        Long companyId = 1L;
+        Long companyId = 1232141425L;
         return courseBaseInfoService.updateCourseBase(companyId, editCourseDTO);
+    }
+
+    @ApiOperation("删除课程")
+    @DeleteMapping("/{courseId}")
+    public void deleteCourseBase(@PathVariable Long courseId) {
+        courseBaseInfoService.deleteCourseBase(courseId);
     }
 }
