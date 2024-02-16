@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.xuecheng</groupId>
-        <artifactId>xuecheng-system</artifactId>
+        <artifactId>xuecheng-media</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>xuecheng-system-api</artifactId>
+    <artifactId>xuecheng-media-api</artifactId>
 
     <dependencies>
         <dependency>

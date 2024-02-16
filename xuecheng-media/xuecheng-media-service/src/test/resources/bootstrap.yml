@@ -1,7 +1,6 @@
-# 微服务配置
 spring:
   application:
-    name: content-service
+    name: media-service
   cloud:
     nacos:
       server-addr: localhost:8848
@@ -14,13 +13,6 @@ spring:
           - data-id: logging-${spring.profiles.active}.yaml
             group: xuecheng-common
             refresh: true
-  #  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://192.168.190.152:3306/xc_content?serverTimezone=UTC&userUnicode=true&useSSL=false&
-#    username: root
-#    password: 123456
+
   profiles:
     active: dev
-# 日志文件配置路径
-#logging:
-#  config: classpath:log4j2-dev.xml
