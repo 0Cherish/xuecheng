@@ -93,7 +93,7 @@ public interface MediaFileService {
      * @param objectName 对象名称
      * @return 下载后的文件
      */
-    public File downloadFileFromMinio(String bucket, String objectName);
+    File downloadFileFromMinio(String bucket, String objectName);
 
     /**
      * 上传文件到minio
@@ -104,5 +104,5 @@ public interface MediaFileService {
      * @param objectName    对象名
      * @return 上传成功
      */
-    public boolean addMediaFilesToMinio(String localFilePath, String mimeType, String bucket, String objectName);
+    boolean addMediaFilesToMinio(String localFilePath, String mimeType, String bucket, String objectName);
 }

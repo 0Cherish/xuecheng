@@ -36,3 +36,16 @@ Content-Type: application/json
 
 ### 课程查询
 GET {{content_host}}/content/course/40
+
+### 课程计划绑定视频
+POST {{content_host}}/content/teachplan/association/media
+Content-Type: application/json
+
+{
+  "mediaId": "b6a40e26ddae0ef1235ae0561efc739c",
+  "fileName": "2.avi",
+  "teachplanId": 2
+}
+
+### 课程计划解绑视频
+DELETE {{content_host}}/content/teachplan/association/media/2/b6a40e26ddae0ef1235ae0561efc739c
