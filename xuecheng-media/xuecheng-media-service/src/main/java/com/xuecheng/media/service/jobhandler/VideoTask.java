@@ -131,6 +131,6 @@ public class VideoTask {
      * @param extension 文件拓展名
      */
     private String getFilePathByMd5(String fileMd5, String extension) {
-        return fileMd5.charAt(0) + "/" + fileMd5.charAt(1) + "/" + fileMd5 + extension;
+        return fileMd5.charAt(0) + "/" + fileMd5.charAt(1) + "/" + fileMd5 + "/" + fileMd5 + extension;
     }
 }

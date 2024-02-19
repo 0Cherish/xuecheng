@@ -3,7 +3,6 @@ package com.xuecheng.content.service;
 import com.xuecheng.content.model.dto.BindTeachplanMediaDTO;
 import com.xuecheng.content.model.dto.SaveTeachplanDTO;
 import com.xuecheng.content.model.dto.TeachplanDTO;
-import com.xuecheng.content.model.po.TeachplanMedia;
 
 import java.util.List;
 

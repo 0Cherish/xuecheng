@@ -105,4 +105,11 @@ public interface MediaFileService {
      * @return 上传成功
      */
     boolean addMediaFilesToMinio(String localFilePath, String mimeType, String bucket, String objectName);
+
+    /**
+     * 根据媒资id查询文件信息
+     * @param mediaId 媒资id
+     * @return 文件信息
+     */
+    MediaFiles getFileById(String mediaId);
 }

@@ -363,7 +363,7 @@ public class MediaFileServiceImpl implements MediaFileService {
      * @param extension 文件拓展名
      */
     private String getFilePathByMd5(String fileMd5, String extension) {
-        return fileMd5.charAt(0) + "/" + fileMd5.charAt(1) + "/" + fileMd5 + extension;
+        return fileMd5.charAt(0) + "/" + fileMd5.charAt(1) + "/" + fileMd5 + "/" + fileMd5 + extension;
     }
 
     /**
@@ -409,6 +409,11 @@ public class MediaFileServiceImpl implements MediaFileService {
             log.error("上传文件出错，bucket：{}，objectName：{}，错误信息：{}", bucket, objectName, e.getMessage());
         }
         return false;
+    }
+
+    @Override
+    public MediaFiles getFileById(String mediaId) {
+        return mediaFilesMapper.selectById(mediaId);
     }
 
     /**
