@@ -32,9 +32,10 @@ public interface MediaFileService {
      * @param companyId           机构id
      * @param uploadFileParamsDTO 上传文件信息
      * @param localFilePath       文件磁盘路径
+     * @param objectName          对象名
      * @return 文件信息
      */
-    UploadFileResultDTO uploadFile(Long companyId, UploadFileParamsDTO uploadFileParamsDTO, String localFilePath);
+    UploadFileResultDTO uploadFile(Long companyId, UploadFileParamsDTO uploadFileParamsDTO, String localFilePath, String objectName);
 
     /**
      * 将文件信息添加到文件表
@@ -108,6 +109,7 @@ public interface MediaFileService {
 
     /**
      * 根据媒资id查询文件信息
+     *
      * @param mediaId 媒资id
      * @return 文件信息
      */

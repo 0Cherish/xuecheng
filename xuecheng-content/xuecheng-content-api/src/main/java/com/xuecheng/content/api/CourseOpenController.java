@@ -1,8 +1,6 @@
 package com.xuecheng.content.api;
 
-import com.xuecheng.content.model.dto.CourseBaseInfoDTO;
 import com.xuecheng.content.model.dto.CoursePreviewDTO;
-import com.xuecheng.content.service.CourseBaseInfoService;
 import com.xuecheng.content.service.CoursePublishService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;

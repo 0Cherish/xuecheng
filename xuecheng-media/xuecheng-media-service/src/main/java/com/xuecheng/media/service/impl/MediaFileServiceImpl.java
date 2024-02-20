@@ -90,7 +90,7 @@ public class MediaFileServiceImpl implements MediaFileService {
     }
 
     @Override
-    public UploadFileResultDTO uploadFile(Long companyId, UploadFileParamsDTO uploadFileParamsDTO, String localFilePath) {
+    public UploadFileResultDTO uploadFile(Long companyId, UploadFileParamsDTO uploadFileParamsDTO, String localFilePath, String objectName) {
         // 获取媒体类型
         String filename = uploadFileParamsDTO.getFilename();
         String extension = filename.substring(filename.lastIndexOf("."));
@@ -98,7 +98,9 @@ public class MediaFileServiceImpl implements MediaFileService {
         // 获取对象名
         String defaultFolderPath = getDefaultFolderPath();
         String fileMd5 = getFileMd5(new File(localFilePath));
-        String objectName = defaultFolderPath + fileMd5 + extension;
+        if (StringUtils.isEmpty(objectName)){
+            objectName = defaultFolderPath + fileMd5 + extension;
+        }
         // 将文件上传到minio
         boolean result = addMediaFilesToMinio(localFilePath, mimeType, bucketMediafiles, objectName);
         if (!result) {
@@ -393,6 +395,7 @@ public class MediaFileServiceImpl implements MediaFileService {
         return mineType;
     }
 
+    @Override
     public boolean addMediaFilesToMinio(String localFilePath, String mimeType, String bucket, String objectName) {
         try {
             UploadObjectArgs uploadObjectArgs = UploadObjectArgs.builder()
