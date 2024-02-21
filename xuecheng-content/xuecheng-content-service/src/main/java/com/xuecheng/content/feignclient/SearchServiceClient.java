@@ -3,6 +3,8 @@ package com.xuecheng.content.feignclient;
 import com.xuecheng.content.model.dto.CourseIndex;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 
 /**
@@ -21,5 +23,5 @@ public interface SearchServiceClient {
      * @return 添加成功
      */
     @PostMapping("/search/index/course")
-    Boolean add(@RequestPart CourseIndex courseIndex);
+    Boolean add(@RequestBody CourseIndex courseIndex);
 }
