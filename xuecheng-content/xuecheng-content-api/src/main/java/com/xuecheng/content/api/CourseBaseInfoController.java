@@ -13,6 +13,7 @@ import com.xuecheng.content.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,10 +31,14 @@ public class CourseBaseInfoController {
     @Autowired
     private CourseBaseInfoService courseBaseInfoService;
 
+    @PreAuthorize("hasAuthority('xc_teachmanager_course_list')")
     @ApiOperation("课程分页查询")
     @PostMapping("/list")
     public PageResult<CourseBase> list(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDTO queryCourseParamsDTO) {
-        return courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParamsDTO);
+        // 取出用户身份
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        String companyId = user.getCompanyId();
+        return courseBaseInfoService.queryCourseBaseList(Long.parseLong(companyId), pageParams, queryCourseParamsDTO);
     }
 
     @ApiOperation("新增课程")
@@ -47,8 +52,6 @@ public class CourseBaseInfoController {
     @ApiOperation("根据id查询课程")
     @GetMapping("/{courseId}")
     public CourseBaseInfoDTO getCourseBaseById(@PathVariable Long courseId) {
-        SecurityUtil.XcUser user = SecurityUtil.getUser();
-        System.out.println(user);
         return courseBaseInfoService.getCourseBaseInfo(courseId);
     }
 

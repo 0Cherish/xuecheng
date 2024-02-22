@@ -49,10 +49,11 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     private CourseTeacherMapper courseTeacherMapper;
 
     @Override
-    public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDTO courseParamsDTO) {
+    public PageResult<CourseBase> queryCourseBaseList(Long companyId, PageParams pageParams, QueryCourseParamsDTO courseParamsDTO) {
         // 拼装查询条件
         LambdaQueryWrapper<CourseBase> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.isNotEmpty(courseParamsDTO.getCourseName()), CourseBase::getName, courseParamsDTO.getCourseName());
+        queryWrapper.eq(CourseBase::getCompanyId, companyId);
         queryWrapper.eq(StringUtils.isNotEmpty(courseParamsDTO.getAuditStatus()), CourseBase::getAuditStatus, courseParamsDTO.getAuditStatus());
         queryWrapper.eq(StringUtils.isNotEmpty(courseParamsDTO.getPublishStatus()), CourseBase::getStatus, courseParamsDTO.getPublishStatus());
 
@@ -66,7 +67,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         return new PageResult<>(items, total, pageParams.getPageNo(), pageParams.getPageSize());
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public CourseBaseInfoDTO createCourseBase(Long companyId, AddCourseDTO addCourseDTO) {
 
