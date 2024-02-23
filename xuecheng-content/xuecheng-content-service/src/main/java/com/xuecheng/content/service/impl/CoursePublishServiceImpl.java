@@ -26,6 +26,8 @@ import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -78,6 +80,9 @@ public class CoursePublishServiceImpl implements CoursePublishService {
 
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     @Override
     public CoursePreviewDTO getCoursePreviewInfo(Long courseId) {
@@ -234,12 +239,19 @@ public class CoursePublishServiceImpl implements CoursePublishService {
             return JSON.parseObject(jsonString, CoursePublish.class);
         } else {
             // 缓存击穿
-            synchronized (this){
+            // 使用redisson获取分布式锁
+            RLock lock = redissonClient.getLock("coursequerylock:" + courseId);
+            // 获取锁
+            lock.lock();
+            try {
                 //从数据库查询
                 CoursePublish coursePublish = getCoursePublish(courseId);
                 // 设置过期时间300+random秒（缓存穿透：缓存空置和特殊值，缓存雪崩：random）
                 redisTemplate.opsForValue().set("course:" + courseId, JSON.toJSONString(coursePublish), 300 + new Random().nextInt(100), TimeUnit.SECONDS);
                 return coursePublish;
+            }finally {
+                // 释放锁
+                lock.unlock();
             }
         }
     }
