@@ -8,8 +8,19 @@
     <name>xuecheng-parent</name>
     <description>xuecheng-parent</description>
     <modules>
+        <module>../xuecheng-base</module>
+        <module>../xuecheng-checkcode</module>
+        <module>../xuecheng-gateway</module>
+        <module>../xuecheng-auth</module>
         <module>../xuecheng-content</module>
+        <module>../xuecheng-learning</module>
+        <module>../xuecheng-media</module>
+        <module>../xuecheng-orders</module>
+        <module>../xuecheng-message-sdk</module>
+        <module>../xuecheng-search</module>
+        <module>../xuecheng-system</module>
     </modules>
+
     <packaging>pom</packaging>
 
     <properties>
