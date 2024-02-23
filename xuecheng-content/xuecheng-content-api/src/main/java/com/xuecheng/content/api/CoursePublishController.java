@@ -73,7 +73,7 @@ public class CoursePublishController {
     @GetMapping("/course/whole/{courseId}")
     public CoursePreviewDTO getCoursePreview(@PathVariable("courseId") Long courseId) {
         //查询课程发布信息
-        CoursePublish coursePublish = coursePublishService.getCoursePublish(courseId);
+        CoursePublish coursePublish = coursePublishService.getCoursePublishCache(courseId);
         if (coursePublish == null) {
             return new CoursePreviewDTO();
         }

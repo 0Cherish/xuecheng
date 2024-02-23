@@ -58,4 +58,12 @@ public interface CoursePublishService {
      * @return 课程发布信息
      */
     CoursePublish getCoursePublish(Long courseId);
+
+    /**
+     * 从缓存查询课程发布信息
+     *
+     * @param courseId 课程id
+     * @return 课程发布信息
+     */
+    CoursePublish getCoursePublishCache(Long courseId);
 }
